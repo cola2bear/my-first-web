@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>과제데이터수집</title>
+
+    <!-- 공공데이터 포털 -->
+    <!-- 미세먼지 검색 - Open API 탭 = 한국환경공단_에어코리아_미세먼지 경보 발령 현황-->
+    <!-- https://www.data.go.kr/data/15073885/openapi.do     -->
+</head>
+
+<body>
+    <button onclick="f_send()">요청 보내기</button>
+    <script>
+        function f_send(){
+            let pageNo = 1;
+            f_ajax(pageNo);
+        }
+
+        let v_hpData = [];
+
+        function f_ajax(p_pageNo){
+            /* Javascript 샘플 코드 */
+    
+            
+    
+            var xhr = new XMLHttpRequest();
+            var url = 'http://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo'; /*URL*/
+            var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + 'DeNMnbklhdM%2FM2fa%2BCw0cF%2FZfx45KSoDjBEeWPUaMnVnyQ2Dx35UXvR%2FEXqECHI3zRct%2FqGY%2BKxNQTDIUJhReA%3D%3D'; /*Service Key*/
+            queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('10'); /**/
+            queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent(p_pageNo); /**/
+
+            xhr.open('GET', url + queryParams);
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    alert('Status: ' + this.status + 'nHeaders: ' + JSON.stringify(this.getAllResponseHeaders()) + 'nBody: ' + this.responseText); // v_ajax.response
+                    
+                    
+                    // response으로 온 데이터의 수가 0이 될때까지 재귀함수
+                    let v_hp = JSON.parse(this.responseText);
+                    console.log(v_json["response"]["body"]["items"].length);
+                    if(v_hp["response"]["body"]["items"].length > 0){
+
+                        let v_items = v_hp["response"]["body"]["items"];
+
+                        for(let i = 0; i < v_items.length; i++){
+                            v_hpData.push(v_items[i]);
+                        }
+                        
+
+                        p_pageNo++;
+                        f_ajax(p_pageNo);
+                    }else{
+                        //data가 0개 오는 구간
+                        document.write("데이터를 전부 불러왔습니다.")
+                        localStorage.setItem("hpData", JSON.stringify(v_hpData));
+                    }
+
+                }
+            };
+    
+            xhr.send('');
+
+
+        }
+    </script>
+
+</body>
+
+</html>

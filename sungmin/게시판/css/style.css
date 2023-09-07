@@ -1,0 +1,30 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    font-size: 10px;
+}
+
+ul, li{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+.container{
+    width: 1000px;
+    margin: 100px auto;
+}
+
+.board_title{
+    margin-bottom: 30px;
+}
+
+.board_title strong{
+    font-size: 3rem;
+}

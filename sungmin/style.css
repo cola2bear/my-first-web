@@ -1,0 +1,44 @@
+.container {
+    border: 1px solid red;
+    width: 1800px;
+    margin: auto;
+}
+
+.search {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1000px;
+    text-align: center;
+}
+
+.search >input {
+    width: 100%;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.search >img {
+    position: absolute;
+    width: 17px;
+    top: 10px;
+    right: 12px;
+    margin: 0;
+}
+
+.logo {
+    position: relative;
+    top: 5px;
+    left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.map{
+    align-items: center;
+}

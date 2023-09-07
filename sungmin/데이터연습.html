@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON 파일 불러오기 및 저장</title>
+</head>
+<body>
+
+<button onclick="loadJSON()">JSON 파일 불러오기</button>
+<button onclick="saveToLocalStorage()">JSON 데이터 저장</button>
+<button onclick="loadFromLocalStorage()">로컬 스토리지에서 불러오기</button>
+<div id="output"></div>
+
+<script>
+    // JSON 데이터를 저장할 변수
+    let jsonData;
+
+    function loadJSON() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "대전광역시_병원.json", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                jsonData = JSON.parse(xhr.responseText);
+                displayData(jsonData);
+            }
+        };
+        xhr.send();
+    }
+
+    function displayData(data) {
+        var output = document.getElementById("output");
+        output.innerHTML = JSON.stringify(data, null, 4);
+    }
+
+    function saveToLocalStorage() {
+        // JSON 데이터를 로컬 스토리지에 저장
+        localStorage.setItem('jsonData', JSON.stringify(jsonData));
+        alert('JSON 데이터가 로컬 스토리지에 저장되었습니다.');
+    }
+
+    function loadFromLocalStorage() {
+        // 로컬 스토리지에서 JSON 데이터 불러오기
+        var storedData = localStorage.getItem('jsonData');
+        if (storedData) {
+            jsonData = JSON.parse(storedData);
+            displayData(jsonData);
+            alert('로컬 스토리지에서 데이터를 불러왔습니다.');
+        } else {
+            alert('로컬 스토리지에 저장된 데이터가 없습니다.');
+        }
+    }
+</script>
+
+</body>
+</html>

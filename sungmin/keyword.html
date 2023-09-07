@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>다음 지도 API</title>
+</head>
+
+<body>
+    <div id="map" style="width:1200px;height:500px;"></div>
+
+    <div class="search">
+        <input id="searchInput" type="text" placeholder="검색어 입력">
+        <button id="searchButton">검색</button>
+        <ul id="resultList"></ul>
+    </div>
+
+
+    <script
+        src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3f9d8ea88071bf7465818b1c0380b6d5&libraries=clusterer"></script>
+    <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = {
+                center: new kakao.maps.LatLng(36.339776, 127.394109), // 지도의 중심좌표
+                level: 2, // 지도의 확대 레벨
+                mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
+            };
+
+        // 지도를 생성한다 
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        // 마커 클러스터러를 생성합니다 
+        var clusterer = new kakao.maps.MarkerClusterer({
+            map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+            averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+            minLevel: 4 // 클러스터 할 최소 지도 레벨 
+        });
+
+        var 데이터 = [
+            [36.3439468, 127.3842475, '<div style="padding:5px">대전자생한방병원</div>'],
+            [36.3462785, 127.3794903, '<div style="padding:5px">대전한방병원</div>'],
+            [36.3129054, 127.3808459, '<div style="padding:5px">인애가한방병원</div>'],
+            [36.3462916, 127.3794379, '<div style="padding:5px">대전대학교 대전한방병원</div>'],
+            [36.3370349, 127.4281235, '<div style="padding:5px">삼성한방병원</div>'],
+            [36.3479631, 127.4325298, '<div style="padding:5px">서울치과병원</div>'],
+            [36.4471659, 127.429895, '<div style="padding:5px">이엘치과병원</div>'],
+            [36.3515847, 127.3824242, '<div style="padding:5px">원광대학치과대학 대전치과병원</div>'],
+            [36.3916979, 127.3120566, '<div style="padding:5px">에이스마일치과병원</div>'],
+            [36.337846, 127.4140269, '<div style="padding:5px">영훈의료재단 선치과병원</div>'],
+            [36.343951, 127.380121, '<div style="padding:5px">남대전요양병원</div>'],
+            [36.3280782, 127.3878464, '<div style="padding:5px">온누리좋은요양병원</div>'],
+            [36.3277847, 127.3811524, '<div style="padding:5px">보아스요양병원</div>'],
+            [36.2777955, 127.4648471, '<div style="padding:5px">산내요양병원</div>'],
+            [36.3347703, 127.4118806, '<div style="padding:5px">튼튼요양병원</div>'],
+            [36.3271158, 127.4668542, '<div style="padding:5px">대전동부요양병원</div>'],
+            [36.368479, 127.4286327, '<div style="padding:5px">중앙요양병원</div>'],
+            [36.3483821, 127.3697577, '<div style="padding:5px">성심요양병원</div>'],
+            [36.3233156, 127.4333126, '<div style="padding:5px">대전보람요양병원</div>'],
+            [36.3547648, 127.443683, '<div style="padding:5px">대전웰니스요양병원</div>'],
+            [36.3748573, 127.3184117, '<div style="padding:5px">벤조인요양병원</div>'],
+            [36.3499351, 127.3872327, '<div style="padding:5px"둔산요양병원</div>'],
+            [36.347358, 127.408509, '<div style="padding:5px">평화요양병원</div>'],
+            [36.3122518, 127.4577373, '<div style="padding:5px">새롬요양병원</div>'],
+            [36.3404303, 127.4350449, '<div style="padding:5px">부모사랑요양병원</div>'],
+            [36.3461956, 127.446951, '<div style="padding:5px">원전의료재단 가양요양병원</div>'],
+            [36.3039515, 127.3199829, '<div style="padding:5px">나우리의료재단 나우리요양병원</div>'],
+            [36.355344, 127.3507104, '<div style="padding:5px">유성한가족요양병원</div>'],
+            [36.3464538, 127.298706, '<div style="padding:5px">큰우리요양병원</div>'],
+            [36.3567539, 127.3641378, '<div style="padding:5px">푸른요양병원</div>'],
+            [36.3436456, 127.4427302, '<div style="padding:5px">다솜요양병원</div>'],
+            [36.2126854, 127.4404522, '<div style="padding:5px">대전광역시립 제2노인전문병원</div>'],
+            [36.3867773, 127.3242218, '<div style="padding:5px">고운마음요양병원</div>'],
+            [36.3192762, 127.3973173, '<div style="padding:5px">섬김요양병원</div>'],
+            [36.3612624, 127.3779576, '<div style="padding:5px">선사인혜요양병원</div>'],
+            [36.3419012, 127.3714009, '<div style="padding:5px">나진요양병원</div>'],
+            [36.3567511, 127.4448117, '<div style="padding:5px">홍제요양병원</div>'],
+            [36.3251254, 127.4087353, '<div style="padding:5px">이-편안요양병원</div>'],
+            [36.4245416, 127.4007769, '<div style="padding:5px">대전테크노요양병원</div>'],
+            [36.3120916, 127.436341, '<div style="padding:5px">세일요양병원</div>'],
+            [36.3193048, 127.4170912, '<div style="padding:5px">은혜요양병원</div>'],
+            [36.4406048, 127.4237841, '<div style="padding:5px">보니파시오요양병원</div>'],
+            [36.3524627, 127.3482179, '<div style="padding:5px">유성웰니스요양병원</div>'],
+            [36.3455161, 127.3802297, '<div style="padding:5px">대전참사랑요양병원</div>'],
+            [36.3571647, 127.3527298, '<div style="padding:5px">성화대전재활전문병원</div>'],
+            [36.3255862, 127.4241609, '<div style="padding:5px">패밀리요양병원</div>'],
+            [36.3589871, 127.3508677, '<div style="padding:5px">대전연세요양병원</div>'],
+            [36.3153854, 127.3991664, '<div style="padding:5px">새생명요양병원</div>'],
+            [36.3350324, 127.4175508, '<div style="padding:5px">세명요양병원</div>'],
+            [36.3585539, 127.4263288, '<div style="padding:5px">한남요양병원</div>'],
+            [36.3329061, 127.3942144, '<div style="padding:5px">세민요양병원</div>'],
+            [36.3301582, 127.4416783, '<div style="padding:5px">기독요양병원</div>'],
+            [36.3324262, 127.421571, '<div style="padding:5px">사랑하나요양병원</div>'],
+            [36.3140442, 127.4158626, '<div style="padding:5px">행복한시니어스 요양병원</div>'],
+            [36.3336986, 127.4288381, '<div style="padding:5px">남영노인전문병원</div>'],
+            [36.2268431, 127.4528912, '<div style="padding:5px">보광노인전문병원</div>'],
+            [36.3517536, 127.3474841, '<div style="padding:5px">코젤병원</div>'],
+            [36.3619146, 127.378939, '<div style="padding:5px">아이웰병원</div>'],
+            [36.3540744, 127.3822729, '<div style="padding:5px">마인드병원</div>'],
+            [36.3544038, 127.3399067, '<div style="padding:5px">비엔피병원</div>'],
+            [36.3592005, 127.3431069, '<div style="padding:5px">대전베스트정형외과병원</div>'],
+            [36.3578336, 127.4332377, '<div style="padding:5px">글로벌튼튼병원</div>'],
+            [36.3540297, 127.3799094, '<div style="padding:5px">킴벨피부과병원</div>'],
+            [36.3540796, 127.3800015, '<div style="padding:5px">써지탑병원</div>'],
+            [36.3661103, 127.4380669, '<div style="padding:5px">유척병원</div>'],
+            [36.3435899, 127.3841757, '<div style="padding:5px">엠블병원</div>'],
+            [36.3435987, 127.3841837, '<div style="padding:5px">더블유여성병원</div>'],
+            [36.3595366, 127.3898732, '<div style="padding:5px">대전센텀병원</div>'],
+            [36.3521136, 127.3459203, '<div style="padding:5px">바로세움병원</div>'],
+            [36.3289379, 127.4386405, '<div style="padding:5px">화병원</div>'],
+            [36.3242324, 127.409773, '<div style="padding:5px">새손병원</div>'],
+            [36.3576748, 127.3452002, '<div style="padding:5px">성세병원</div>'],
+            [36.3363878, 127.3904534, '<div style="padding:5px">가톨릭병원</div>'],
+            [36.3518418, 127.3826794, '<div style="padding:5px">고운손병원</div>'],
+            [36.3453859, 127.3805802, '<div style="padding:5px">서울여성병원</div>'],
+            [36.3193269, 127.4157717, '<div style="padding:5px">대전미래병원</div>'],
+            [36.3485706, 127.3826857, '<div style="padding:5px">에스엔케이병원</div>'],
+            [36.3431654, 127.3856333, '<div style="padding:5px">미즈여성병원</div>'],
+            [36.3252689, 127.4226358, '<div style="padding:5px">참다남병원</div>'],
+            [36.3396693, 127.3909186, '<div style="padding:5px">허리사랑병원</div>'],
+            [36.3436113, 127.3837874, '<div style="padding:5px">대전우리병원</div>'],
+            [36.3435892, 127.3854127, '<div style="padding:5px">조이병원</div>'],
+            [36.3555109, 127.3783642, '<div style="padding:5px">세우리병원</div>'],
+            [36.3483868, 127.3778852, '<div style="padding:5px">미래여성병원</div>'],
+            [36.3483312, 127.3698881, '<div style="padding:5px">계룡병원</div>'],
+            [36.2247344, 127.3349664, '<div style="padding:5px">한마음정신병원</div>'],
+            [36.4340156, 127.4240862, '<div style="padding:5px">신탄진한일병원</div>'],
+            [36.3400802, 127.3916498, '<div style="padding:5px">연합정형외과병원</div>'],
+            [36.3314214, 127.3070838, '<div style="padding:5px">시립정신병원</div>'],
+            [36.3262212, 127.4275705, '<div style="padding:5px">이안과병원</div>'],
+            [36.3625437, 127.4177913, '<div style="padding:5px">의명의료재단 대전병원</div>'],
+            [36.3319402, 127.3064324, '<div style="padding:5px">신생병원</div>'],
+            [36.3674733, 127.413971, '<div style="padding:5px">대전한일병원</div>'],
+            [36.3082953, 127.3703465, '<div style="padding:5px">대청병원</div>'],
+            [36.368569, 127.4284157, '<div style="padding:5px">근로복지공단 대전병원</div>'],
+            [36.3750378, 127.3248974, '<div style="padding:5px">유성선병원</div>'],
+            [36.3481587, 127.4358789, '<div style="padding:5px">대전한국병원</div>'],
+            [36.3067343, 127.3422116, '<div style="padding:5px">건양대학교병원</div>'],
+            [36.4472392, 127.4392343, '<div style="padding:5px">대전보훈병원</div>'],
+            [36.3361189, 127.4107284, '<div style="padding:5px">대전선병원</div>'],
+            [36.3553148, 127.3819082, '<div style="padding:5px">을지대학교병원</div>'],
+            [36.3223026, 127.4205526, '<div style="padding:5px">대전성모병원</div>'],
+            [36.316757, 127.4163131, '<div style="padding:5px">충남대학교병원</div>'],
+            [36.4001838, 127.3489898, '<div style="padding:5px">국군대전치과병원</div>'],
+            [36.400431, 127.3457536, '<div style="padding:5px">국군대전병원</div>']
+        ];
+
+        var markers = [];
+
+        for (var i = 0; i < 데이터.length; i++) {
+            // 지도에 마커를 생성하고 표시한다
+            var marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(데이터[i][0], 데이터[i][1]), // 마커의 좌표
+                map: map // 마커를 표시할 지도 객체
+            });
+
+            var iwContent = '<div style="padding:5px">내용</div>' // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+
+
+            // 인포윈도우를 생성합니다
+            var infowindow = new kakao.maps.InfoWindow({
+                content: 데이터[i][2]
+            });
+
+            // 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+            // infowindow.open(map, marker);
+            markers.push(marker);
+
+            kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+            kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+        }
+        // 클러스터러에 마커들을 추가합니다
+        clusterer.addMarkers(markers);
+
+        function makeOverListener(map, marker, infowindow) {
+            return function () {
+                infowindow.open(map, marker);
+            };
+        }
+
+        // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+        function makeOutListener(infowindow) {
+            return function () {
+                infowindow.close();
+            };
+        }
+
+        // 초기에 모든 infowindow를 숨김
+        markers.forEach(function (marker) {
+            marker.infowindow.close();
+        });
+
+        var places = new kakao.maps.services.Places();
+
+        var callback = function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                console.log(result);
+            }
+        };
+
+        places.keywordSearch('판교 치킨', callback);
+
+        // 검색 버튼과 입력 필드 요소를 가져옵니다.
+        var searchButton = document.getElementById("searchButton");
+        var searchInput = document.getElementById("searchInput");
+
+        // 검색 버튼 클릭 이벤트를 처리합니다.
+        searchButton.addEventListener("click", function () {
+            var keyword = searchInput.value; // 검색어를 가져옵니다.
+            searchPlaces(keyword); // 검색 함수를 호출하여 결과를 가져옵니다.
+        });
+
+        // 장소 검색 함수를 정의합니다.
+        function searchPlaces(keyword) {
+            var mapService = new kakao.maps.services.Places();
+
+            // 키워드로 장소 검색
+            mapService.keywordSearch(keyword, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    // 검색 결과가 OK인 경우
+                    // result 배열에 검색 결과가 담겨 있습니다.
+                    console.log(result);
+                    // 이제 검색 결과를 화면에 표시하거나 필요한 정보를 추출할 수 있습니다.
+                    displaySearchResults(result);
+                }
+            });
+        }
+
+        // 검색 결과를 화면에 표시하는 함수를 정의합니다.
+        function displaySearchResults(results) {
+            // 결과를 화면에 표시하는 코드를 작성하세요.
+            // 예: 검색 결과를 리스트로 만들어 화면에 출력
+            var resultList = document.getElementById("resultList");
+            resultList.innerHTML = ""; // 이전 검색 결과를 지우고 새로운 결과 출력
+
+            for (var i = 0; i < results.length; i++) {
+                var place = results[i];
+                var placeName = place.place_name;
+                var address = place.address_name;
+
+                var listItem = document.createElement("li");
+                listItem.textContent = placeName + " - " + address;
+
+                resultList.appendChild(listItem);
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
