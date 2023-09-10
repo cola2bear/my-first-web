@@ -158,10 +158,82 @@
         button:active {
             transform: scale(0.93);
         }
+
+        #logo {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    cursor: pointer;
+
+}
+
+
+
+#top_menu {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    color: black;
+}
+
+#top_menu a {
+    text-decoration: none;
+    color: black;
+    margin: 20px;
+}
+
+
+nav {
+    left: 0; /* left 값을 0으로 설정하여 왼쪽에 배치합니다. */
+    position: fixed;
+    bottom: 20%;
+    font-size: 20px;
+    justify-content: left;
+    align-items: center;
+    text-align: center;
+    margin: 5px;
+}
+
+nav>div {
+    background-color: rgb(247, 247, 245);
+    border-radius: 15px;
+    padding-left: 30px;
+    padding-right: 60px;
+    padding-bottom: 120px;
+    padding-top: 120px;
+
+}
+
+nav li {
+    margin-top: 30px;
+}
+
+nav li a {
+    color: black;
+}
     </style>
 </head>
 
 <body>
+<div class="list_container">
+
+    <div id="logo">
+
+        <img width="120" height="90"
+            src="https://png.pngtree.com/png-clipart/20190630/original/pngtree-vector-hospital-icon-png-image_4155931.jpg"
+            alt="">
+
+    </div>
+    
+    <nav>
+        <div class="l_menu">
+            <ul>
+                <li><a href="../home.html">홈으로</a></li>
+                <li><a href="...">etc</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <h2>리뷰 게시판</h2>
     <main class="main__container">
         <div class="board__container">
@@ -189,6 +261,7 @@
                 <button class="editor__btn" id="editor-submit-btn">작성 완료</button>
             </form>
         </div>
+    </div>
     </main>
     <script>
         const boardTableBody = document.querySelector('#board-body');
